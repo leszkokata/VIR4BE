@@ -46,7 +46,7 @@ passport.deserializeUser((user, done) => {
 
 passport.use('local', new localStrategy((username, password, done) => {
 
-    userModel.findOne({ email: username }, function(err, user){
+    userModel.findOne({ username: username }, function(err, user){
         if(err) return done('Hiba a user keresése során!', undefined)
         if(user) {
             user.comparePasswords(password, function(err, isMatch){
@@ -55,14 +55,14 @@ passport.use('local', new localStrategy((username, password, done) => {
                 return done(null, user);
             })
         } else {
-            adminModel.findOne({ email: username }, function(err, admin){
+            adminModel.findOne({ username: username }, function(err, admin){
                 if(err) return done('Hiba az admin keresése során!', undefined)
                 if(admin) {
                     admin.comparePasswords(password, function(err, isMatch){
                         if(err || !isMatch) return done('Helyelen jelszó vagy hiba az összehasonlitás során!', undefined)
                         return done(null, admin);
                     })
-                } else { return done("Hibás vagy nem létező orvos felhasználónév!", undefined); }
+                } else { return done("Hibás vagy nem létező felhasználónév!", undefined); }
             });
         };
     });
@@ -86,14 +86,3 @@ app.use('/', require('./routes'));
 
 // Szerver inditasa
 app.listen(port, () => { console.log('Fut a szerver a ' + port + ' porton!'); });
-
-/*
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
-});
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});*/

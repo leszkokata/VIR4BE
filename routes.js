@@ -9,18 +9,18 @@ const adminModel = mongoose.model('admin');
 router.route('/login').post((req, res) => {
     if(req.body.username && req.body.password) {
         passport.authenticate('local', (error, user) => {
-            if(error) { return res.json( { success: false, message: 'Hiba a bejelentkezes kozben! ' + error } ); }
+            if(error) { return res.json( { success: false, message: 'Hiba a bejelentkezes soran! ' + error } ); }
             else {
                 // Ez hívja meg a serializeUser-t és hozza létre a sessiont
                 req.logIn(user, (error) => {
                     if(error) return res.json( { success: false, message: 'Hiba a bejelentkezes kozben! ' + error } );
-                    else if(user.permToJpg){ return res.json( { success: true, message: 'A user bejelentkezese sikeres!', name: user.name, username: user.email } ); }
-                    else if(user.isAdmin){ return res.json( { success: true, message: 'Az admin bejelentkezese sikeres!', name: user.name ,username: user.email } ); }
+                    else if(user.permToJpg){ return res.json( { success: true, message: 'A user bejelentkezese sikeres!', name: user.name, username: user.username } ); }
+                    else if(user.isAdmin){ return res.json( { success: true, message: 'Az admin bejelentkezese sikeres!', name: user.name ,username: user.username } ); }
                     else { return res.json( { success: false, message: 'Hiba a bejelentkezes kozben!' } ); }
                 });
             }
         })(req, res);
-    } else { return res.json( { success: false, message: 'Hiányzó email vagy jelszó!' } ); }
+    } else { return res.json( { success: false, message: 'Hiányzó username vagy jelszó!' } ); }
 });
 
 // Regisztrálási felület userek számára
@@ -31,18 +31,18 @@ router.route('/registerUser').get((req, res) => {
 // Regisztrálási felület userek számára
 router.route('/registerUser').post((req, res) => {
 
-    if(req.body.name && req.body.email && req.body.password && req.body.permToJpg && req.body.permToPng && req.body.permToGif ) {
+    if(req.body.name && req.body.username && req.body.password && req.body.permToJpg && req.body.permToPng && req.body.permToGif ) {
 
-        const patient = new userModel({
+        const user = new userModel({
             name: req.body.name,
-            email: req.body.email,
+            username: req.body.username,
             password: req.body.password,
             permToJpg: req.body.permToJpg,
             permToPng: req.body.permToPng,
             permToGif: req.body.permToGif
         });
 
-        patient.save(function(error) {
+        user.save(function(error) {
             if(error) return res.json( { success: false, message: 'Sikertelen regisztracio! Hiba: '+ error } );
             return res.json( { success: true, message: 'Sikeres regisztráció!!' } );
         });
@@ -58,16 +58,16 @@ router.route('/registerAdmin').get((req, res) => {
 // Regisztrálási felület orvosok számára
 router.route('/registerAdmin').post((req, res) => {
 
-    if(req.body.name && req.body.email && req.body.password && req.body.isAdmin) {
+    if(req.body.name && req.body.username && req.body.password && req.body.isAdmin) {
 
-        const doctor = new adminModel({
+        const admin = new adminModel({
             name: req.body.name,
-            email: req.body.email,
+            username: req.body.username,
             password: req.body.password,
             isAdmin: req.body.isAdmin
         });
 
-        doctor.save(function(error) {
+        admin.save(function(error) {
             if(error) return res.json( { success: false, message: 'Sikertelen regisztracio! Hiba: ' + error } );
             return res.json( { success: true, message: 'Sikeres regisztráció!' } );
         });
