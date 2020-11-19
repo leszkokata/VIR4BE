@@ -8,7 +8,7 @@ const expressSession = require('express-session');
 const mongoose = require('mongoose');
 const config = require('./config/database');
 const port = 8080;
-const hostname = '127.0.0.1';
+const cors = require('cors');
 
 const app = express();
 
@@ -19,6 +19,21 @@ require('./models/admin.model');
 const userModel = mongoose.model('user');
 const adminModel = mongoose.model('admin');
 
+
+var whitelist = ['chrome-extension://fhbjgbiflinjbdggehcddcbncdddomop','http://localhost','http://localhost:4200','http://localhost:4200/login', 'http://localhost:4200/user','http://localhost:4200/admin'];
+var corsOptions = {
+    origin: function (origin, callback) {
+        
+      if (whitelist.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+        
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    optionsSuccessStatus: 200,
+    credentials: true
+};
 
 mongoose.connect(config.database);
 mongoose.connection.on('connected', () => { console.log("Sikeres kapcsolódás az adatbázishoz!"); })
@@ -80,9 +95,9 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', require('./routes'));
+//app.use('/', require('./routes'));
 //app.use(cors(corsOptions));
-//app.use('/', cors(corsOptions), require('./routes'));
+app.use('/', cors(corsOptions), require('./routes'));
 
 // Szerver inditasa
 app.listen(port, () => { console.log('Fut a szerver a ' + port + ' porton!'); });

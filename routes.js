@@ -82,21 +82,46 @@ router.route('/logout').post((req, res) => {
         return res.json( { success: true, message: 'Sikeres kijelentkezes!' } );
     } else { return res.json( { success: false, message: 'Elobb be kell jelentkezni, hogy utana kijelentkezhess!' } ); }
 });
-/*
-// Kivalasztott user listazasa
-router.route('/doctor/:patient').get((req, res) => {
-    if(req.isAuthenticated()) {
-        // Ha orvos
-        if(req.user.profession){
-            // Paciens neve, amiszerint kiolvassuk a mereseket es kilistazzuk
-            var patient = req.params.patient;
 
-            measurementModel.find({ patient: patient }, function(err, measurements) {
-                if(err) return res.json( { success: false, message: 'Hiba a meresek listazasa folyaman!' + err } );
-                return res.json( { success: true, message: measurements } );
+// Felhasznalok permission adatainak lekerese
+router.route('/admin/getpermissondata').get((req, res) => {
+    if(req.isAuthenticated()) {
+        // Ha admin akkor megnezheti
+        if(req.user.isAdmin){
+            userModel.find({}, function(err, userdata) {
+                if(err) return res.json( { success: false, message: 'Hiba az adatok listazasa folyaman!' + err } );
+                return res.json( { success: true, message: userdata } );
             });
         } else { return res.json( { success: false, message: 'Nincs jogosultsaga az oldalhoz! Ehhez be kell jelentkeznie!' } ); }
     } else { return res.json( { success: false, message: 'Ehhez be kell jelentkeznie!' } ); }
 });
-*/
+
+// Felhasznalok permission adatainak lekerese
+router.route('/user/getpermissondata').get((req, res) => {
+    if(req.isAuthenticated()) {
+            userModel.find({username: req.user.username }, function(err, data) {
+                if(err) return res.json( { success: false, message: 'Hiba az adatok listazasa folyaman!' + err } );
+                return res.json( { success: true, message: data } );
+            });
+       
+    } else { return res.json( { success: false, message: 'Ehhez be kell jelentkeznie!' } ); }
+});
+
+
+// Felhasznalok permission adatainak valtoztatasa
+router.route('/admin/setpermissondata').put((req, res) => {
+    if(req.isAuthenticated()) {
+        // Ha admin akkor valtoztathat
+        if(req.user.isAdmin){                
+            userModel.findOneAndUpdate({username : req.body.username}, {permToJpg: req.body.permToJpg, permToPng: req.body.permToPng, permToGif: req.body.permToGif}, function(error, object){ 
+                if(error){
+                    return res.json( { success: false, message: "Nem sikerult a modositas! error:"+ error } );
+                }
+            } );
+
+        } else { return res.json( { success: false, message: 'Nincs jogosultsaga az oldalhoz! Ehhez be kell jelentkeznie!' } ); }
+    } else { return res.json( { success: false, message: 'Ehhez be kell jelentkeznie!' } ); }
+
+});
+
 module.exports = router;
