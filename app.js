@@ -100,4 +100,4 @@ app.use(passport.session());
 app.use('/', cors(corsOptions), require('./routes'));
 
 // Szerver inditasa
-app.listen(port, () => { console.log('Fut a szerver a ' + port + ' porton!'); });
+module.exports = app.listen(port, () => { console.log('Fut a szerver a ' + port + ' porton!'); });

@@ -1,0 +1,42 @@
+{
+  "users": [
+	{
+	   "name":"Admin Jancsi",
+	   "username":"probajancsi@proba.hu",
+	   "password":"$2b$10$VDowGKTG7ffx9L8UwxT00O4l14bfUpHvHkDFEsyxV7zOu8O74D0Iy",
+	   "isAdmin":true
+	},
+	{
+	   "name":"Tomi",
+	   "username":"probatomi@proba.hu",
+	   "password":"$2b$10$pZheCksTb5RAnMGsINlbleS4Csy5W6F5E/uDdFoJWoGs.lD8hQkw2",
+	   "permToJpg":true,
+	   "permToPng":true,
+	   "permToGif":true
+	},
+	{
+	   "name":"Judit",
+	   "username":"probajudit@proba.hu",
+	   "password":"$2b$10$dxZeAQk81d8qQZTT1K4ba.dFfsO82NDORt3V1XXdpkNT23C6W64FG",
+	   "permToJpg":false,
+	   "permToPng":true,
+	   "permToGif":true
+	},
+	{
+	   "name":"Viki",
+	   "username":"probaviki@proba.hu",
+	   "password":"$2b$10$c6MU9bOm7mVWOMTh/gepEuwQHy796iXgENwokb./nGMYCIq5YMLyS",
+	   "permToJpg":false,
+	   "permToPng":false,
+	   "permToGif":true
+	},
+	{
+	   "name":"Misi",
+	   "username":"probamisi@proba.hu",
+	   "password":"$2b$10$MxCev8sInagyx8E5DLW01e96gjfkfq8uCm8CftyHPzLn.CxkqlMJ2",
+	   "permToJpg":false,
+	   "permToPng":false,
+	   "permToGif":false
+	}
+  ]
+}
